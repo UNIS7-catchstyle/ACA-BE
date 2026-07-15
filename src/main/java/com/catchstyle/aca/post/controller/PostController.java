@@ -1,0 +1,33 @@
+package com.catchstyle.aca.post.controller;
+
+
+import com.catchstyle.aca.common.response.ApiResponse;
+import com.catchstyle.aca.post.dto.PostDto;
+import com.catchstyle.aca.post.service.PostService;
+import jakarta.validation.Valid;
+import lombok.RequiredArgsConstructor;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+import java.util.Map;
+
+@RestController
+@RequestMapping("/api/v1/posts")
+@RequiredArgsConstructor
+public class PostController {
+
+    private PostService postService;
+
+    //게시물 및 옷 정보 등록 API
+    @PostMapping
+    public ApiResponse<Map<String, Long>> createPost(@RequestBody @Valid PostDto request) {
+        Long postId = postService.createPost(request);
+
+        return ApiResponse.success(200, "게시글 등록 성공", Map.of("postId", postId));
+    }
+
+
+
+}
