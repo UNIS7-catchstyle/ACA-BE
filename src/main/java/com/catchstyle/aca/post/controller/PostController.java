@@ -16,7 +16,7 @@ import java.util.Map;
 @RequiredArgsConstructor
 public class PostController {
 
-    private PostService postService;
+    private final PostService postService;
 
     //게시물 및 옷 정보 등록
     @PostMapping

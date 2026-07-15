@@ -15,7 +15,7 @@ public record PostDto(
 
         String groupName,
 
-        @NotBlank(message = "일정 태그는 필수입니다.")
+        @NotNull(message = "일정 타입은 필수입니다.")
         ScheduleType scheduleType,
 
         @NotNull(message = "착장 공개 날짜는 필수입니다.")
