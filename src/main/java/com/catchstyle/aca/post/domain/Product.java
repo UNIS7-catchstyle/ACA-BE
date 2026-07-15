@@ -1,14 +1,14 @@
 package com.catchstyle.aca.post.domain;
 
 import jakarta.persistence.*;
-import lombok.AccessLevel;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 
 @Entity
 @Getter
+@Builder
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@AllArgsConstructor(access = AccessLevel.PRIVATE)
 @Table(name = "products")
 public class Product {
     @Id
@@ -39,15 +39,6 @@ public class Product {
     void assignPost(Post post) {
         this.post = post;
     }
-
-    public Product(Category category, String brandName, String productUrl,String productImageUrl, Long price) {
-        this.category = category;
-        this.brandName = brandName;
-        this.productUrl = productUrl;
-        this.productImageUrl = productImageUrl;
-        this.price = price;
-    }
-
 
     // 상품 정보 수정 시 자동 업데이트
     public void update(Category category, String brandName, String productUrl,String productImageUrl, Long price) {

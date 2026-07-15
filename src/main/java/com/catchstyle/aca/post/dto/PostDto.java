@@ -1,6 +1,7 @@
 package com.catchstyle.aca.post.dto;
 
 import com.catchstyle.aca.post.domain.LinkType;
+import com.catchstyle.aca.post.domain.ScheduleType;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 
@@ -14,8 +15,8 @@ public record PostDto(
 
         String groupName,
 
-        @NotBlank(message = "태그명은 필수입니다.")
-        String tagName,
+        @NotBlank(message = "일정 태그는 필수입니다.")
+        ScheduleType scheduleType,
 
         @NotNull(message = "착장 공개 날짜는 필수입니다.")
         LocalDate postDate,

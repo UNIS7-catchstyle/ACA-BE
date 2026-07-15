@@ -1,5 +1,7 @@
 package com.catchstyle.aca.post.service;
 
+import com.catchstyle.aca.common.exception.CustomException;
+import com.catchstyle.aca.common.exception.ErrorCode;
 import com.catchstyle.aca.post.domain.Product;
 import com.catchstyle.aca.post.domain.Post;
 import com.catchstyle.aca.post.dto.ProductDto;
@@ -16,14 +18,13 @@ import org.springframework.transaction.annotation.Transactional;
 public class PostService {
     private final PostRepository postRepository;
 
-    Long dummyUserId=1L;
 
     @Transactional
     public Long createPost(PostDto request){
         Post post = Post.builder()
                 .celebName(request.celebName())
                 .groupName(request.groupName())
-                .tagName(request.tagName())
+                .scheduleType(request.scheduleType())
                 .postDate(request.postDate())
                 .outfitImageUrl(request.outfitImageUrl())
                 .linkUrl(request.link().url())
@@ -47,5 +48,25 @@ public class PostService {
 
         Post savedPost=postRepository.save(post);
         return savedPost.getId();
+    }
+
+    //특정 게시글에 상품 정보 1건 추가
+    @Transactional
+    public void addProductToPost(Long postId, ProductDto request) {
+        // 1. 게시글 찾기
+        Post post = postRepository.findById(postId)
+                .orElseThrow(() -> new CustomException(ErrorCode.POST_NOT_FOUND));
+
+        // 2. 단일 상품 정보 생성
+        Product product = Product.builder()
+                .category(request.category())
+                .brandName(request.brandName())
+                .productUrl(request.productUrl())
+                .productImageUrl(request.productImageUrl())
+                .price(request.price())
+                .build();
+
+        // 3. 게시글에 상품 추가 (Cascade 설정으로 인해 자동 저장됨)
+        post.addProduct(product);
     }
 }
