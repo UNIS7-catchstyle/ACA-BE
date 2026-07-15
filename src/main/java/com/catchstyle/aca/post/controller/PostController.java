@@ -32,4 +32,10 @@ public class PostController {
                 : "게시글 검색 성공";
         return ApiResponse.success(200, message, data);
     }
+
+    @GetMapping("/{postId}")
+    public ApiResponse<PostDetailResponse> getPost(@PathVariable Long postId) {
+        PostDetailResponse data = postService.getPost(postId);
+        return ApiResponse.success(200, "게시글 상세 조회 성공", data);
+    }
 }

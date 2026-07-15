@@ -26,4 +26,12 @@ public class PostService {
         return PostListResponse.from(page);
     }
 
+    public PostDetailResponse getPost(Long postId) {
+        if (postId == null || postId <= 0) {
+            throw new CustomException(ErrorCode.INVALID_POST_ID);
+        }
+        Post post = postRepository.findWithProductsById(postId)
+                .orElseThrow(() -> new CustomException(ErrorCode.POST_NOT_FOUND));
+        return PostDetailResponse.from(post);
+    }
 }
