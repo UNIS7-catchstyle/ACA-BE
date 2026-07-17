@@ -15,19 +15,36 @@ public interface PostRepository extends JpaRepository<Post, Long> {
     @EntityGraph(attributePaths = "products")
     Optional<Post> findWithProductsById(Long id);
 
-    @Query(value = """
-            SELECT p FROM Post p
-            WHERE LOWER(CONCAT(
+    @Query(
+            value = """
+                SELECT p
+                FROM Post p
+                WHERE LOWER(CONCAT(
                     FUNCTION('DATE_FORMAT', p.postDate, '%y%m%d'),
-                    ' ', p.groupName, ' ', p.celebName, ' ', p.tagName
-                  )) LIKE LOWER(CONCAT('%', :keyword, '%'))
-            """,
-           countQuery = """
-            SELECT COUNT(p) FROM Post p
-            WHERE LOWER(CONCAT(
+                    ' ',
+                    COALESCE(p.groupName, ''),
+                    ' ',
+                    p.celebName,
+                    ' ',
+                    CAST(p.scheduleType AS string)
+                )) LIKE LOWER(CONCAT('%', :keyword, '%'))
+                """,
+            countQuery = """
+                SELECT COUNT(p)
+                FROM Post p
+                WHERE LOWER(CONCAT(
                     FUNCTION('DATE_FORMAT', p.postDate, '%y%m%d'),
-                    ' ', p.groupName, ' ', p.celebName, ' ', p.tagName
-                  )) LIKE LOWER(CONCAT('%', :keyword, '%'))
-            """)
-    Page<Post> searchByKeyword(@Param("keyword") String keyword, Pageable pageable);
+                    ' ',
+                    COALESCE(p.groupName, ''),
+                    ' ',
+                    p.celebName,
+                    ' ',
+                    CAST(p.scheduleType AS string)
+                )) LIKE LOWER(CONCAT('%', :keyword, '%'))
+                """
+    )
+    Page<Post> searchByKeyword(
+            @Param("keyword") String keyword,
+            Pageable pageable
+    );
 }

@@ -7,6 +7,7 @@ public enum Category {
     DRESS,
     SHOES,
     BAG,
-    ACCESSORY,
-    ETC
+    ETC,
+    HAT,
+    ACCESSORY
 }

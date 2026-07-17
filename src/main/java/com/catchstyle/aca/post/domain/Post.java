@@ -21,45 +21,49 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-@Table(name = "posts")
 @Getter
+@Builder
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
-@Builder
+@Table(name = "posts")
 public class Post {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @Column(nullable = false)
-    private LocalDate postDate;
+    @Builder.Default
+    private Long userId = 1L;
 
-    @Column(nullable = false, length = 50)
-    private String groupName;
-
-    @Column(nullable = false, length = 50)
+    @Column(nullable = false)
     private String celebName;
 
-    @Column(nullable = false, length = 50)
-    private String tagName;
+    private String groupName;
+
+    @Column(nullable = false)
+    @Enumerated(EnumType.STRING)
+    private ScheduleType scheduleType;
+
+    @Column(nullable = false)
+    private LocalDate postDate;
 
     @Column(length = 1000)
     private String outfitImageUrl;
 
-    @Column(length = 1000)
+    @Column(nullable = false)
     private String linkUrl;
 
+    @Column(nullable = false)
     @Enumerated(EnumType.STRING)
-    @Column(length = 20)
     private LinkType linkType;
 
     @OneToMany(mappedBy = "post", cascade = CascadeType.ALL, orphanRemoval = true)
     @Builder.Default
     private List<Product> products = new ArrayList<>();
 
+
     public void addProduct(Product product) {
-        products.add(product);
+        this.products.add(product);
         product.assignPost(this);
     }
 }

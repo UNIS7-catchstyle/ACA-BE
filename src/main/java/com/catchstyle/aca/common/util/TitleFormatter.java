@@ -3,6 +3,8 @@ package com.catchstyle.aca.common.util;
 import com.catchstyle.aca.post.domain.Post;
 
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+import java.util.List;
 
 public final class TitleFormatter {
 
@@ -12,11 +14,17 @@ public final class TitleFormatter {
     }
 
     public static String format(Post post) {
-        return "%s %s %s %s".formatted(
-                post.getPostDate().format(DATE_FORMATTER),
-                post.getGroupName(),
-                post.getCelebName(),
-                post.getTagName()
-        );
+        List<String> parts = new ArrayList<>();
+
+        parts.add(post.getPostDate().format(DATE_FORMATTER));
+
+        if (post.getGroupName() != null && !post.getGroupName().isBlank()) {
+            parts.add(post.getGroupName());
+        }
+
+        parts.add(post.getCelebName());
+        parts.add(post.getScheduleType().name());
+
+        return String.join(" ", parts);
     }
 }
