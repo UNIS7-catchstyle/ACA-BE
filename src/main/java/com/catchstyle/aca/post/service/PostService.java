@@ -17,16 +17,24 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional(readOnly = true)
 public class PostService {
     private final PostRepository postRepository;
+    private final InstagramService instagramService; //데모용 인스타 썸네일 스크래퍼
 
 
     @Transactional
     public Long createPost(PostDto request){
+        String inputUrl = request.outfitImageUrl();
+        String imageUrl = inputUrl;
+
+        // 이미지가 없고, 인스타그램 링크인 경우에만 서비스 호출
+        if ((imageUrl == null || imageUrl.isBlank()) && inputUrl != null && inputUrl.contains("instagram.com")) {
+            imageUrl = instagramService.getThumbnailUrl(inputUrl);
+        }
         Post post = Post.builder()
                 .celebName(request.celebName())
                 .groupName(request.groupName())
                 .scheduleType(request.scheduleType())
                 .postDate(request.postDate())
-                .outfitImageUrl(request.outfitImageUrl())
+                .outfitImageUrl(imageUrl)
                 .linkUrl(request.link().url())
                 .linkType(request.link().type())
                 // Builder.Default 설정으로 products 리스트는 자동 초기화됨
