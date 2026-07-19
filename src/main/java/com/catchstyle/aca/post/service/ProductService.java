@@ -15,6 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
 public class ProductService {
 
     private final ProductRepository productRepository;
+    private final InstagramService instagramService; //데모용 인스타 썸네일 스크래퍼
 
     //상품 정보 수정
     @Transactional
