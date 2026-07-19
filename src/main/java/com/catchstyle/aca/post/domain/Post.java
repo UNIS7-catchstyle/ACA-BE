@@ -1,5 +1,20 @@
 package com.catchstyle.aca.post.domain;
 
+import jakarta.persistence.CascadeType;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
+import jakarta.persistence.Table;
+import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -24,36 +39,28 @@ public class Post {
     @Builder.Default
     private Long userId = 1L;
 
-    //연예인 이름
     @Column(nullable = false)
     private String celebName;
 
-    //그룹명(선택)
     private String groupName;
 
-    //일정 타입
     @Column(nullable = false)
-    @Enumerated(EnumType.STRING) // 이거 안하면 JPA가 기본값인 숫자인덱스로 저장. 나중에 항목 바뀔 시 문제 생김
+    @Enumerated(EnumType.STRING)
     private ScheduleType scheduleType;
 
-    //착장 공개 날짜
     @Column(nullable = false)
     private LocalDate postDate;
 
-    // 착장 이미지 URL
     @Column(length = 1000)
     private String outfitImageUrl;
 
-    //착장글 링크
     @Column(nullable = false)
     private String linkUrl;
 
-    //착장 링크 타입
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
-    private LinkType linkType; // YOUTUBE, INSTA...
+    private LinkType linkType;
 
-    // Post가 저장/삭제될 때 연관된 Clothes도 자동으로 함께 저장/삭제
     @OneToMany(mappedBy = "post", cascade = CascadeType.ALL, orphanRemoval = true)
     @Builder.Default
     private List<Product> products = new ArrayList<>();

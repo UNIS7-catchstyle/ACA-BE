@@ -2,6 +2,16 @@ package com.catchstyle.aca.post.service;
 
 import com.catchstyle.aca.common.exception.CustomException;
 import com.catchstyle.aca.common.exception.ErrorCode;
+import com.catchstyle.aca.post.domain.Post;
+import com.catchstyle.aca.post.dto.PostDetailResponse;
+import com.catchstyle.aca.post.dto.PostListResponse;
+import com.catchstyle.aca.post.repository.PostRepository;
+import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
 import com.catchstyle.aca.post.domain.Product;
 import com.catchstyle.aca.post.domain.Post;
 import com.catchstyle.aca.post.dto.ProductDto;
@@ -16,9 +26,25 @@ import org.springframework.transaction.annotation.Transactional;
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
 public class PostService {
+
     private final PostRepository postRepository;
     private final InstagramService instagramService; //데모용 인스타 썸네일 스크래퍼
 
+    public PostListResponse getPosts(String keyword, Pageable pageable) {
+        Page<Post> page = (keyword == null || keyword.isBlank())
+                ? postRepository.findAll(pageable)
+                : postRepository.searchByKeyword(keyword.trim(), pageable);
+        return PostListResponse.from(page);
+    }
+
+    public PostDetailResponse getPost(Long postId) {
+        if (postId == null || postId <= 0) {
+            throw new CustomException(ErrorCode.INVALID_POST_ID);
+        }
+        Post post = postRepository.findWithProductsById(postId)
+                .orElseThrow(() -> new CustomException(ErrorCode.POST_NOT_FOUND));
+        return PostDetailResponse.from(post);
+    }
 
     @Transactional
     public Long createPost(PostDto request){
@@ -40,7 +66,7 @@ public class PostService {
                 // Builder.Default 설정으로 products 리스트는 자동 초기화됨
                 .build();
 
-        if(request.products()!=null){
+        if (request.products() != null) {
             //for (타입 변수명 : 반복할 데이터 모음)
             for (ProductDto productDto : request.products()) {
                 Product product = Product.builder()
@@ -54,7 +80,7 @@ public class PostService {
             }
         }
 
-        Post savedPost=postRepository.save(post);
+        Post savedPost = postRepository.save(post);
         return savedPost.getId();
     }
 
@@ -77,4 +103,6 @@ public class PostService {
         // 3. 게시글에 상품 추가 (Cascade 설정으로 인해 자동 저장됨)
         post.addProduct(product);
     }
+
 }
+
