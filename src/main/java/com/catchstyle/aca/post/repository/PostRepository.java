@@ -53,4 +53,6 @@ public interface PostRepository extends JpaRepository<Post, Long> {
             @Param("keyword") String keyword,
             Pageable pageable
     );
+
+    boolean existsByCelebNameAndLinkUrl(String celebName, String linkUrl);
 }
