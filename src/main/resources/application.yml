@@ -19,4 +19,4 @@ logging:
 
 app:
   dummy-data:
-    enabled: ${DUMMY_DATA_ENABLED:false}
+    enabled: ${DUMMY_DATA_ENABLED:true}

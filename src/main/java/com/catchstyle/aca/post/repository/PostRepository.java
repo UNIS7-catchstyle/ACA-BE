@@ -54,5 +54,6 @@ public interface PostRepository extends JpaRepository<Post, Long> {
             Pageable pageable
     );
 
-    boolean existsByCelebNameAndLinkUrl(String celebName, String linkUrl);
+    @EntityGraph(attributePaths = "products")
+    Optional<Post> findByCelebNameAndLinkUrl(String celebName, String linkUrl);
 }

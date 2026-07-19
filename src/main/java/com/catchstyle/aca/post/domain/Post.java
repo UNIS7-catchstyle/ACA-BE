@@ -71,4 +71,26 @@ public class Post {
         this.products.add(product);
         product.assignPost(this);
     }
+
+    public void removeProduct(Product product) {
+        this.products.remove(product);
+    }
+
+    public void update(
+            String celebName,
+            String groupName,
+            ScheduleType scheduleType,
+            LocalDate postDate,
+            String outfitImageUrl,
+            String linkUrl,
+            LinkType linkType
+    ) {
+        this.celebName = celebName;
+        this.groupName = groupName;
+        this.scheduleType = scheduleType;
+        this.postDate = postDate;
+        this.outfitImageUrl = outfitImageUrl;
+        this.linkUrl = linkUrl;
+        this.linkType = linkType;
+    }
 }

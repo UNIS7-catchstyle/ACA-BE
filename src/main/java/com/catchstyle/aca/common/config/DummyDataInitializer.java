@@ -10,7 +10,9 @@ import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 @Component
 @RequiredArgsConstructor
@@ -26,7 +28,7 @@ public class DummyDataInitializer implements ApplicationRunner {
     @Override
     @Transactional
     public void run(ApplicationArguments args) {
-        saveIfAbsent(
+        upsert(
                 "카리나",
                 "에스파",
                 LocalDate.of(2026, 4, 11),
@@ -45,7 +47,7 @@ public class DummyDataInitializer implements ApplicationRunner {
                 )
         );
 
-        saveIfAbsent(
+        upsert(
                 "카리나",
                 "에스파",
                 LocalDate.of(2026, 2, 18),
@@ -78,7 +80,7 @@ public class DummyDataInitializer implements ApplicationRunner {
                 )
         );
 
-        saveIfAbsent(
+        upsert(
                 "카리나",
                 "에스파",
                 LocalDate.of(2026, 4, 27),
@@ -97,7 +99,7 @@ public class DummyDataInitializer implements ApplicationRunner {
                 )
         );
 
-        saveIfAbsent(
+        upsert(
                 "윈터",
                 "에스파",
                 LocalDate.of(2026, 3, 8),
@@ -116,7 +118,7 @@ public class DummyDataInitializer implements ApplicationRunner {
                 )
         );
 
-        saveIfAbsent(
+        upsert(
                 "닝닝",
                 "에스파",
                 LocalDate.of(2025, 10, 8),
@@ -136,7 +138,7 @@ public class DummyDataInitializer implements ApplicationRunner {
         );
     }
 
-    private void saveIfAbsent(
+    private void upsert(
             String celebName,
             String groupName,
             LocalDate postDate,
@@ -146,22 +148,58 @@ public class DummyDataInitializer implements ApplicationRunner {
             String outfitImageUrl,
             List<Product> products
     ) {
-        if (postRepository.existsByCelebNameAndLinkUrl(celebName, linkUrl)) {
-            return;
+        Post post = postRepository.findByCelebNameAndLinkUrl(celebName, linkUrl)
+                .orElseGet(() -> Post.builder()
+                        .celebName(celebName)
+                        .groupName(groupName)
+                        .postDate(postDate)
+                        .scheduleType(scheduleType)
+                        .linkType(linkType)
+                        .linkUrl(linkUrl)
+                        .outfitImageUrl(outfitImageUrl)
+                        .build());
+
+        post.update(
+                celebName,
+                groupName,
+                scheduleType,
+                postDate,
+                outfitImageUrl,
+                linkUrl,
+                linkType
+        );
+        syncProducts(post, products);
+        postRepository.save(post);
+    }
+
+    private void syncProducts(Post post, List<Product> desiredProducts) {
+        List<Product> unmatchedProducts = new ArrayList<>(post.getProducts());
+
+        for (Product desired : desiredProducts) {
+            Product existing = unmatchedProducts.stream()
+                    .filter(product -> Objects.equals(
+                            product.getProductUrl(),
+                            desired.getProductUrl()
+                    ))
+                    .findFirst()
+                    .orElse(null);
+
+            if (existing == null) {
+                post.addProduct(desired);
+                continue;
+            }
+
+            existing.update(
+                    desired.getCategory(),
+                    desired.getBrandName(),
+                    desired.getProductUrl(),
+                    desired.getProductImageUrl(),
+                    desired.getPrice()
+            );
+            unmatchedProducts.remove(existing);
         }
 
-        Post post = Post.builder()
-                .celebName(celebName)
-                .groupName(groupName)
-                .postDate(postDate)
-                .scheduleType(scheduleType)
-                .linkType(linkType)
-                .linkUrl(linkUrl)
-                .outfitImageUrl(outfitImageUrl)
-                .build();
-
-        products.forEach(post::addProduct);
-        postRepository.save(post);
+        unmatchedProducts.forEach(post::removeProduct);
     }
 
     private Product product(
