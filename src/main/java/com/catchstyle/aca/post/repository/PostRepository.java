@@ -17,31 +17,37 @@ public interface PostRepository extends JpaRepository<Post, Long> {
 
     @Query(
             value = """
-                SELECT p
-                FROM Post p
-                WHERE LOWER(CONCAT(
-                    FUNCTION('DATE_FORMAT', p.postDate, '%y%m%d'),
-                    ' ',
-                    COALESCE(p.groupName, ''),
-                    ' ',
-                    p.celebName,
-                    ' ',
-                    CAST(p.scheduleType AS string)
-                )) LIKE LOWER(CONCAT('%', :keyword, '%'))
-                """,
+            SELECT p
+            FROM Post p
+            WHERE LOWER(CONCAT(
+                FUNCTION('DATE_FORMAT', p.postDate, '%y%m%d'),
+                CASE
+                    WHEN p.groupName IS NULL OR TRIM(p.groupName) = ''
+                    THEN ''
+                    ELSE CONCAT(' ', p.groupName)
+                END,
+                ' ',
+                p.celebName,
+                ' ',
+                CAST(p.scheduleType AS string)
+            )) LIKE LOWER(CONCAT('%', :keyword, '%'))
+            """,
             countQuery = """
-                SELECT COUNT(p)
-                FROM Post p
-                WHERE LOWER(CONCAT(
-                    FUNCTION('DATE_FORMAT', p.postDate, '%y%m%d'),
-                    ' ',
-                    COALESCE(p.groupName, ''),
-                    ' ',
-                    p.celebName,
-                    ' ',
-                    CAST(p.scheduleType AS string)
-                )) LIKE LOWER(CONCAT('%', :keyword, '%'))
-                """
+            SELECT COUNT(p)
+            FROM Post p
+            WHERE LOWER(CONCAT(
+                FUNCTION('DATE_FORMAT', p.postDate, '%y%m%d'),
+                CASE
+                    WHEN p.groupName IS NULL OR TRIM(p.groupName) = ''
+                    THEN ''
+                    ELSE CONCAT(' ', p.groupName)
+                END,
+                ' ',
+                p.celebName,
+                ' ',
+                CAST(p.scheduleType AS string)
+            )) LIKE LOWER(CONCAT('%', :keyword, '%'))
+            """
     )
     Page<Post> searchByKeyword(
             @Param("keyword") String keyword,
