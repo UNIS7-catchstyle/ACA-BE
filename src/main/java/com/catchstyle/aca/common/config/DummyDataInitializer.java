@@ -33,7 +33,7 @@ public class DummyDataInitializer implements ApplicationRunner {
                 ScheduleType.INSTA,
                 LinkType.INSTA,
                 "https://www.instagram.com/p/DW_C_l3FA1k/?img_index=1",
-                "/images/outfits/260411-karina.jpg",
+                "/images/outfits/260411-karina.png",
                 List.of(
                         product(
                                 Category.DRESS,
@@ -52,21 +52,21 @@ public class DummyDataInitializer implements ApplicationRunner {
                 ScheduleType.INSTA,
                 LinkType.INSTA,
                 "https://www.instagram.com/p/DUu5AF1ko76/?img_index=1",
-                "/images/outfits/260218-karina.jpg",
+                "/images/outfits/260218-karina.png",
                 List.of(
                         product(
                                 Category.TOP,
                                 "리포메이션 Julie Knit Top",
                                 128_600L,
                                 "https://www.thereformation.com/products/julie-knit-top/1317228.html",
-                                "/images/products/260218-karina-01.jpg"
+                                "/images/products/260218-karina-01.png"
                         ),
                         product(
                                 Category.ACCESSORY,
                                 "까르띠에 탱크 머스트",
                                 6_000_000L,
                                 "https://www.cartier.com/ko-kr/watches/all-collections/tank/",
-                                "/images/products/260218-karina-02.jpg"
+                                "/images/products/260218-karina-02.png"
                         ),
                         product(
                                 Category.ACCESSORY,
@@ -85,7 +85,7 @@ public class DummyDataInitializer implements ApplicationRunner {
                 ScheduleType.INSTA,
                 LinkType.INSTA,
                 "https://www.instagram.com/p/DXogIqrFINU/?img_index=1",
-                "/images/outfits/260427-karina.jpg",
+                "/images/outfits/260427-karina.png",
                 List.of(
                         product(
                                 Category.DRESS,
@@ -104,14 +104,14 @@ public class DummyDataInitializer implements ApplicationRunner {
                 ScheduleType.INSTA,
                 LinkType.INSTA,
                 "https://www.instagram.com/p/DXogIqrFINU/?img_index=1",
-                "/images/outfits/260308-winter.jpg",
+                "/images/outfits/260308-winter.png",
                 List.of(
                         product(
                                 Category.OUTER,
                                 "엔니즈 (ANDNEEDS)",
                                 120_000L,
                                 "https://www.29cm.co.kr/products/3051060",
-                                "/images/products/260328-winter-01.png"
+                                "/images/products/260308-winter-01.png"
                         )
                 )
         );
@@ -123,14 +123,14 @@ public class DummyDataInitializer implements ApplicationRunner {
                 ScheduleType.YOUTUBE,
                 LinkType.YOUTUBE,
                 "https://www.youtube.com/watch?v=NQwmhE_Gakc",
-                "/images/outfits/251008-ningning.jpg",
+                "/images/outfits/251008-NingNing.png",
                 List.of(
                         product(
                                 Category.OUTER,
                                 "이지 (Yeezy)",
                                 56_000L,
                                 "https://kream.co.kr/products/562101",
-                                "/images/products/251008-ningning-01.png"
+                                "/images/products/251008-NingNing-01.png"
                         )
                 )
         );
