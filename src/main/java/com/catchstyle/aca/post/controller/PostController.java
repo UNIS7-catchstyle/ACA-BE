@@ -39,6 +39,7 @@ public class PostController {
         PostDetailResponse data = postService.getPost(postId);
         return ApiResponse.success(200, "게시글 상세 조회 성공", data);
     }
+
     //게시물 및 옷 정보 등록
     @PostMapping
     public ApiResponse<Map<String, Long>> createPost(@RequestBody @Valid PostDto request) {

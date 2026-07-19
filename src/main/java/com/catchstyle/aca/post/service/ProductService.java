@@ -15,22 +15,37 @@ import org.springframework.transaction.annotation.Transactional;
 public class ProductService {
 
     private final ProductRepository productRepository;
-    private final InstagramService instagramService; //데모용 인스타 썸네일 스크래퍼
+    private final InstagramService instagramService; //데모용 상품 썸네일 스크래퍼
+    private final ProductImageService productImageService;
 
     //상품 정보 수정
     @Transactional
     public void updateProduct(Long productId, ProductDto request) {
-        // 1. 수정할 상품 조회 (혹시 존재하지 않을 시 예외 처리)
         Product product = productRepository.findById(productId)
-            .orElseThrow(() -> new CustomException(ErrorCode.PRODUCT_NOT_FOUND));
+                .orElseThrow(() -> new CustomException(ErrorCode.PRODUCT_NOT_FOUND));
 
-        // 2. 수정사항 업데이트
+        String imageUrl = getImageUrl(request.productUrl(), request.productImageUrl());
+
         product.update(
                 request.category(),
                 request.brandName(),
                 request.productUrl(),
-                request.productImageUrl(),
+                imageUrl, // 가공된 URL 적용
                 request.price()
         );
+    }
+
+    private String getImageUrl(String productUrl, String currentImageUrl) {
+        if (currentImageUrl != null && !currentImageUrl.isBlank()) {
+            return currentImageUrl;
+        }
+
+        if (productUrl == null || productUrl.isBlank()) return null;
+
+        if (productUrl.contains("instagram.com")) {
+            return instagramService.getThumbnailUrl(productUrl);
+        } else {
+            return productImageService.getProductThumbnailUrl(productUrl);
+        }
     }
 }
