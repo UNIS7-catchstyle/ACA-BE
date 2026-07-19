@@ -111,7 +111,7 @@ public class DummyDataInitializer implements ApplicationRunner {
                                 "엔니즈 (ANDNEEDS)",
                                 120_000L,
                                 "https://www.29cm.co.kr/products/3051060",
-                                "/images/products/260328-winter-01.png"
+                                "/images/products/260308-winter-01.png"
                         )
                 )
         );
