@@ -25,6 +25,17 @@ import lombok.NoArgsConstructor;
 @Builder
 public class Product {
 
+import jakarta.persistence.*;
+import lombok.*;
+
+
+@Entity
+@Getter
+@Builder
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@AllArgsConstructor(access = AccessLevel.PRIVATE)
+@Table(name = "products")
+public class Product {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;

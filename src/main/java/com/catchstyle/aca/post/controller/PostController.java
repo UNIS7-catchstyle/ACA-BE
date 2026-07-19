@@ -38,4 +38,25 @@ public class PostController {
         PostDetailResponse data = postService.getPost(postId);
         return ApiResponse.success(200, "게시글 상세 조회 성공", data);
     }
+    //게시물 및 옷 정보 등록
+    @PostMapping
+    public ApiResponse<Map<String, Long>> createPost(@RequestBody @Valid PostDto request) {
+        Long postId = postService.createPost(request);
+
+        return ApiResponse.success(200, "게시글 등록 성공", Map.of("postId", postId));
+    }
+
+    //옷 정보 등록
+    @PostMapping("/{postId}")
+    public ApiResponse<Void> addProductToPost(
+            @PathVariable Long postId,
+            @RequestBody @Valid ProductDto request) {
+        postService.addProductToPost(postId,request);
+
+        return ApiResponse.success(200, "상품 등록 성공", null);
+    }
+
+
+
+
 }
