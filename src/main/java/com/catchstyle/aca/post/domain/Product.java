@@ -17,17 +17,6 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-@Entity
-@Table(name = "products")
-@Getter
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
-@AllArgsConstructor(access = AccessLevel.PRIVATE)
-@Builder
-public class Product {
-
-import jakarta.persistence.*;
-import lombok.*;
-
 
 @Entity
 @Getter
@@ -62,5 +51,14 @@ public class Product {
 
     void assignPost(Post post) {
         this.post = post;
+    }
+
+    // 상품 정보 수정 시 자동 업데이트
+    public void update(Category category, String brandName, String productUrl,String productImageUrl, Long price) {
+        this.category = category;
+        this.brandName = brandName;
+        this.productUrl = productUrl;
+        this.productImageUrl = productImageUrl;
+        this.price = price;
     }
 }

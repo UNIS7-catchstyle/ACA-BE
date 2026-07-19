@@ -44,12 +44,9 @@ public class PostService {
                 .orElseThrow(() -> new CustomException(ErrorCode.POST_NOT_FOUND));
         return PostDetailResponse.from(post);
     }
-}
-    private final PostRepository postRepository;
-
 
     @Transactional
-    public Long createPost(PostDto request){
+    public Long createPost(PostDto request) {
         Post post = Post.builder()
                 .celebName(request.celebName())
                 .groupName(request.groupName())
@@ -61,7 +58,7 @@ public class PostService {
                 // Builder.Default 설정으로 products 리스트는 자동 초기화됨
                 .build();
 
-        if(request.products()!=null){
+        if (request.products() != null) {
             //for (타입 변수명 : 반복할 데이터 모음)
             for (ProductDto productDto : request.products()) {
                 Product product = Product.builder()
@@ -75,7 +72,7 @@ public class PostService {
             }
         }
 
-        Post savedPost=postRepository.save(post);
+        Post savedPost = postRepository.save(post);
         return savedPost.getId();
     }
 
@@ -98,4 +95,6 @@ public class PostService {
         // 3. 게시글에 상품 추가 (Cascade 설정으로 인해 자동 저장됨)
         post.addProduct(product);
     }
+
 }
+
