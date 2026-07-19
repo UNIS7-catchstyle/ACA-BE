@@ -1,5 +1,30 @@
 package com.catchstyle.aca.post.domain;
 
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.Table;
+import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+
+@Entity
+@Table(name = "products")
+@Getter
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@AllArgsConstructor(access = AccessLevel.PRIVATE)
+@Builder
+public class Product {
+
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -35,18 +60,7 @@ public class Product {
     @Column(length = 1000)
     private String productUrl;
 
-    // 양방향 연관관계 편의 메서드용 (package-private)
     void assignPost(Post post) {
         this.post = post;
     }
-
-    // 상품 정보 수정 시 자동 업데이트
-    public void update(Category category, String brandName, String productUrl,String productImageUrl, Long price) {
-        this.category = category;
-        this.brandName = brandName;
-        this.productUrl = productUrl;
-        this.productImageUrl = productImageUrl;
-        this.price = price;
-    }
-
 }
